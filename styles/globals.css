@@ -1,0 +1,122 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@layer base {
+  :root {
+    /* Spliter Light — Sulu green accent on soft off-white */
+    --background: 210 17% 98%;
+    --foreground: 94 100% 6%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 94 100% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 94 100% 10%;
+
+    /* Sulu green (#9FE870 lightened for light bg) */
+    --primary: 97 72.3% 45%;
+    --primary-foreground: 94 100% 10%;
+
+    --secondary: 210 12% 95%;
+    --secondary-foreground: 94 100% 10%;
+
+    --muted: 210 12% 95%;
+    --muted-foreground: 210 6% 57%;
+
+    --accent: 97 72.3% 67.5%;
+    --accent-foreground: 94 100% 10%;
+
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 210 12% 92%;
+    --input: 210 12% 92%;
+    --ring: 97 72.3% 67.5%;
+
+    --chart-1: 97 72% 45%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+
+    --radius: 1.5rem;
+
+    --sidebar-background: 210 17% 98%;
+    --sidebar-foreground: 94 100% 6%;
+    --sidebar-primary: 97 72.3% 45%;
+    --sidebar-primary-foreground: 94 100% 10%;
+    --sidebar-accent: 97 72.3% 90%;
+    --sidebar-accent-foreground: 94 100% 10%;
+    --sidebar-border: 210 12% 92%;
+    --sidebar-ring: 97 72.3% 67.5%;
+  }
+
+  .dark {
+    /* Spliter Dark — Deep Fir background with Sulu green accents */
+    --background: 94 100% 6%;
+    --foreground: 0 0% 98%;
+
+    --card: 94 40% 12%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 94 40% 12%;
+    --popover-foreground: 0 0% 98%;
+
+    /* Sulu green — brighter on dark bg */
+    --primary: 97 72.3% 67.5%;
+    --primary-foreground: 94 100% 10%;
+
+    --secondary: 94 20% 18%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 94 30% 16%;
+    --muted-foreground: 94 10% 65%;
+
+    --accent: 94 30% 22%;
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 95% 65%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 94 25% 18%;
+    --input: 94 25% 18%;
+    --ring: 97 72.3% 67.5%;
+
+    --chart-1: 97 72% 67%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+
+    --radius: 1.5rem;
+
+    --sidebar-background: 94 40% 10%;
+    --sidebar-foreground: 0 0% 98%;
+    --sidebar-primary: 97 72.3% 67.5%;
+    --sidebar-primary-foreground: 94 100% 10%;
+    --sidebar-accent: 94 30% 22%;
+    --sidebar-accent-foreground: 0 0% 98%;
+    --sidebar-border: 94 25% 18%;
+    --sidebar-ring: 97 72.3% 67.5%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
