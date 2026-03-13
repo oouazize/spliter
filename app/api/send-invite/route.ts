@@ -3,7 +3,7 @@ import {NextRequest, NextResponse} from 'next/server'
 
 export async function POST(req: NextRequest) {
   try {
-    const {to, inviteCode} = await req.json()
+    const {to, inviteCode, inviterName} = await req.json()
 
     if (!to || !inviteCode) {
       return NextResponse.json({error: 'Missing required fields'}, {status: 400})
@@ -19,7 +19,10 @@ export async function POST(req: NextRequest) {
     const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3001'
     const redirectTo = `${appUrl}/i/${inviteCode}`
 
-    const {error} = await adminClient.auth.admin.inviteUserByEmail(to, {redirectTo})
+    const {error} = await adminClient.auth.admin.inviteUserByEmail(to, {
+      redirectTo,
+      data: {inviter_name: inviterName ?? ''},
+    })
 
     if (error) {
       return NextResponse.json({error: error.message}, {status: 400})
