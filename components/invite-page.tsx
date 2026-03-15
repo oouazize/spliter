@@ -13,9 +13,9 @@ export function InvitePage() {
   const invitedBy = searchParams.get('invitedBy')
 
   // Construct deep link
-  // splitit://invite?code=...&invitedBy=...
+  // spliter://invite?code=...&invitedBy=...
   // We pass the entire query string to the app
-  const deepLink = `splitit://invite?${searchParams.toString()}`
+  const deepLink = `spliter://invite?${searchParams.toString()}`
 
   const [os, setOs] = useState<'ios' | 'android' | 'other'>('other')
 

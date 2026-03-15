@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 }
 
 const LAST_UPDATED = 'March 11, 2026'
-const CONTACT_EMAIL = 'privacy@spliter.app'
+const CONTACT_EMAIL = 'oussamaouaziz123@gmail.com'
 
 export default function PrivacyPage() {
   return (
