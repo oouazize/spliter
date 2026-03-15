@@ -68,8 +68,10 @@ function InviteAuthFormInner({
 
   // Redirect to app, with store fallback after 2.5s
   function redirectToApp() {
-    // Pass the invite code so the app skips onboarding/paywall for invited users
-    window.location.href = `spliter://accept-invite?code=${code}`
+    // Open the app root — invitation is already accepted on the web side,
+    // so the app goes through onboarding/paywall normally and skips login
+    // (the user is already authenticated).
+    window.location.href = `spliter://`
     setTimeout(() => {
       const userAgent = navigator.userAgent || navigator.vendor || (window as any).opera
       const isIOS = /iPad|iPhone|iPod/.test(userAgent) && !(window as any).MSStream
@@ -118,6 +120,9 @@ function InviteAuthFormInner({
   }, [])
 
   async function handleOAuthSignIn(provider: 'google' | 'apple') {
+    // Persist invite code in sessionStorage as a fallback — Supabase OAuth may
+    // strip custom query params from redirectTo on some configurations.
+    sessionStorage.setItem('pending_invite_code', code)
     const redirectTo = `${window.location.origin}/auth/callback?invite_code=${code}`
     const {error} = await supabase.auth.signInWithOAuth({
       provider,
@@ -140,12 +145,22 @@ function InviteAuthFormInner({
         const {error} = await supabase.auth.signInWithPassword({email, password})
         if (error) throw error
       } else {
-        const {error} = await supabase.auth.signUp({
+        const {data, error} = await supabase.auth.signUp({
           email,
           password,
-          options: {data: {full_name: fullName}},
+          options: {
+            data: {full_name: fullName},
+            // Preserve the invite code through the email confirmation link
+            emailRedirectTo: `${window.location.origin}/auth/callback?invite_code=${code}`,
+          },
         })
         if (error) throw error
+
+        if (!data.session) {
+          // Email confirmation required — invite will be accepted after confirmation
+          toast.info('Check your email to confirm your account. The invitation will be accepted automatically.')
+          return
+        }
       }
 
       // Accept invitation now that the user is authenticated
@@ -285,7 +300,7 @@ function InviteAuthFormInner({
         </div>
 
         {/* Login Toggle */}
-        <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg border border-slate-100 mb-4">
+        <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg border border-slate-100 mb-2">
           <span className="text-sm text-slate-600">Already have an account?</span>
           <Button
             variant="outline"
@@ -298,7 +313,7 @@ function InviteAuthFormInner({
           </Button>
         </div>
 
-        <form onSubmit={onSubmit} className="space-y-4">
+        <form onSubmit={onSubmit} className="space-y-2">
           {!isLogin && (
             <div className="space-y-2">
               <Label
@@ -310,7 +325,7 @@ function InviteAuthFormInner({
               <Input
                 id="fullName"
                 name="fullName"
-                placeholder="Redouane lam"
+                placeholder="Your Name"
                 defaultValue={defaultFullName}
                 required
                 className="h-10 text-base"
@@ -343,15 +358,17 @@ function InviteAuthFormInner({
             >
               Password
             </Label>
-            <Input
-              id="password"
-              name="password"
-              type="password"
-              required
-              minLength={8}
-              className="h-10 text-base"
-            />
-            {!isLogin && <p className="text-xs text-slate-400">Minimum 8 characters</p>}
+            <>
+              <Input
+                id="password"
+                name="password"
+                type="password"
+                required
+                minLength={8}
+                className="h-10 text-base"
+              />
+              {!isLogin && <p className="text-xs text-slate-400">Minimum 8 characters</p>}
+            </>
           </div>
 
           <Button

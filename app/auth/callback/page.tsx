@@ -10,17 +10,20 @@ function CallbackHandler() {
 
   useEffect(() => {
     const code = searchParams.get('code')
-    const inviteCode = searchParams.get('invite_code')
+    // Try URL param first, then sessionStorage fallback (in case OAuth stripped the param)
+    const inviteCode =
+      searchParams.get('invite_code') || sessionStorage.getItem('pending_invite_code')
+    if (inviteCode) sessionStorage.removeItem('pending_invite_code')
 
     if (!code) {
-      router.replace('/')
+      router.replace(inviteCode ? `/i/${inviteCode}` : '/')
       return
     }
 
     supabase.auth.exchangeCodeForSession(code).then(async ({error}) => {
       if (error) {
         console.error('OAuth callback error:', error)
-        router.replace('/')
+        router.replace(inviteCode ? `/i/${inviteCode}` : '/')
         return
       }
 
